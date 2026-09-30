@@ -49,6 +49,7 @@ def to_html(R):
 CSS='''@page{size:399.7pt 700pt;margin:0} body{margin:0;font-family:Pretendard}
 .p{font-size:9.2pt;line-height:14.55pt;color:#383838;text-align:justify;margin:0;word-break:break-all}
 .n{font-size:7.54pt;line-height:11pt;color:#6d6d6d;margin:0;word-break:break-all}
+.n82{font-size:8.2pt;line-height:12.3pt;color:#6f6f6f;margin:0;word-break:break-all;text-align:justify}
 .lb{font-weight:700;color:#0d4176}.em{font-weight:700;color:#1a1a1a;text-decoration:underline;text-decoration-thickness:0.75pt;text-underline-offset:2.2pt}
 .q{font-weight:700;color:#0b1f5c} b{font-weight:700;color:#1a1a1a}'''
 def render_snip(inner,cls='p',width=399.7,css_extra=''):

@@ -121,7 +121,7 @@ def eotech():
 # 8 ---------------- RF머트리얼즈 : capacity / demand map (G)
 def rfmat():
     left=vbars('매출 경로','(억원, E는 회사 인터뷰 기준 전망)',[('2024<br>(역산)',445,LS,'445',GRAY),('2025',641,NAVY,'641',NAVY),('2026E',1000,SLATE,'1,000',MID,True),('2027E',1600,SLATE,'1,600',MID,True)],
-               w=168,h=84,vmax=1900,grid=(500,1000,1500),notes=note('2025년 +44%, 영업이익 흑자 전환. 3분기 매출이 연 1,000억원 경로 위에 있는지가 첫 확인',c='dn',mt=0))
+               w=168,h=84,vmax=1900,grid=(500,1000,1500),notes=note('2027E는 2026E의 1.6배, 2025년의 2.5배(회사 전망). 3분기 매출이 연 1,000억원 경로 위에 있는지가 첫 확인',c='dn',mt=0))
     def cap(label,a,b,alab,blab,col):
         return (f'<div style="margin-top:6pt"><div style="font-size:6.6pt;font-weight:700;color:{NAVY}">{label}</div>'
                 f'<div style="display:flex;align-items:flex-end;gap:6pt;height:44pt;margin-top:2pt">'
@@ -130,9 +130,9 @@ def rfmat():
                 f'<div style="width:40pt;height:{b/2.6*40:.1f}pt;background:{col};font-size:6.4pt;font-weight:700;color:#fff;text-align:center;line-height:10pt">약 2.5배</div>'
                 f'<div style="font-size:5.9pt;color:#555;line-height:8pt;margin-left:4pt;align-self:center">{alab}<br><b style="color:{col}">{blab}</b></div></div></div>')
     right=('<div class="dg"><div class="dt">수요와 생산능력(CAPA)의 시차</div><div class="du">(2026년 = 1.0)</div></div>'
-           +cap('고객 수요: 루멘텀 요청 물량',1,2.5,'2026년 물량 대비','2027년 요청 물량',NAVY)
+           +cap('고객 요청 물량(확정 수주 아님)',1,2.5,'2026년 물량 대비','2027년 요청 물량',NAVY)
            +cap('생산능력: 안산 2개 공장 → 통합 신공장',1,2.5,'신공장 약 9,900㎡','2027년 말 완공 예정',RED)
-           +note('수요 2.5배는 2027년, CAPA 2.5배는 2027년 말. 증설 효과가 실적에 반영되기까지 시차가 있고 최대 고객 의존도가 높다',c='dr',mt=5))
+           +note('요청 물량 2.5배는 2027년(2026년 대비), CAPA 2.5배는 2027년 말 완공 기준. 매출 전망 1.6배(2027E/2026E)와 기준이 달라 같은 폭으로 비교하지 않는다',c='dr',mt=5))
     return row(left,col(right,194),gap=18)
 
 # 9 ---------------- ISC : trend + AI mix (B)
@@ -184,16 +184,16 @@ def samsungsdi():
 
 # 12 ---------------- SK이노베이션 : segment comparison (E)
 def skinno():
-    left=vbars('2분기 영업이익 3조 4,873억원의 구성','(억원, 흑자 전환)',[('정유',6512,MID,'6,512',MID),('윤활유',6919,RED,'6,919',RED),('배터리',8218,NAVY,'8,218',NAVY),('E&S·화학 등<br>(차감 산출)',13224,LS,'13,224',GRAY)],
-               w=226,h=86,vmax=16000,grid=(5000,10000,15000),notes=note('정유+윤활유 1조 3,431억원이 에너지 부문 이익. 기타는 연결 합계에서 세 부문을 뺀 값(E&S·화학·석유개발·연결조정 포함)',mt=0))
-    right=vbars('윤활유: 외생 변수의 크기','(억원)',[('2026.1Q<br>(차감)',1885,LS,'1,885',GRAY),('2026.2Q',6919,RED,'6,919',RED)],w=120,h=86,vmax=8300,grid=(),
+    left=vbars('2분기 영업이익 3조 4,873억원의 구성','(억원, 흑자 전환)',[('정유<br>재고 관련',5600,'#d98c84','약 5,600',RED),('정유<br>그 외',912,MID,'약 900',MID),('윤활유',6919,RED,'6,919',RED),('배터리<br>(일회성 포함)',8218,NAVY,'8,218',NAVY),('E&S·화학·<br>석유개발 등',13224,LS,'13,224',GRAY)],
+               w=236,h=86,vmax=16000,grid=(5000,10000,15000),notes=note('정유 6,512억원 중 약 5,600억원이 재고 관련 이익, 배터리 흑자에는 보상금·IRA 세액공제 포함. E&S·화학·석유개발 등은 차감(연결조정 포함)',mt=0))
+    right=vbars('윤활유: 외생 변수의 크기','(억원)',[('2026.1Q<br>(차감)',1885,LS,'1,885',GRAY),('2026.2Q',6919,RED,'6,919',RED)],w=112,h=86,vmax=8300,grid=(),
                 notes=note('한 분기 +5,034억원. 중동 경쟁사 공급 차질로 그룹Ⅲ 기유 마진 상승',c='dr',mt=0))
-    return row(left,right,gap=28)+note('2분기 매출 29조 1,572억원(+49.9%). 상향의 원천이 유가와 경쟁사 공급 차질이라는 외생 변수에 기대고 있어 지속 기간이 판단의 핵심이다',mt=5)
+    return row(left,right,gap=22)+note('정상 마진, 재고·래깅 효과, 보상금·세액공제를 나누면 반복을 기대할 수 있는 이익은 표면 숫자보다 작다. 유가 상승의 효과는 정제마진·가동률·조달 차질에 따라 달라진다',mt=5)
 
 # 13 ---------------- GE 버노바 : 2x2 small multiples (E + D)
 def gev():
     return ('<img src="diag2/gev_2x2.png" style="width:386pt;display:block">'
-            +note('2분기 잉여현금흐름 51억달러(2025년 연간 상회) · 조정 EBITDA 마진 11.3%. 주문 → 백로그 → 현금은 확인, 남은 변수는 마진',c='dr',mt=4))
+            +note('2분기 수주 유기적 +88%, 매출 유기적 +12% · 잉여현금흐름 51억달러(선수금 등 운전자본 포함) · 조정 EBITDA 마진 11.3%. 남은 변수는 마진과 이익의 현금 전환',c='dr',mt=4))
 
 # 14 ---------------- 아리스타 네트웍스 : trend + margin structure (B)
 def anet():
@@ -212,14 +212,14 @@ def anet():
 
 # 15 ---------------- 마이크로소프트 : business flow loop (A)
 def msft():
-    fl=flow([('① AI CAPEX','1,159억달러',['FY26 유형자산 투자','연간 매출의 35%'],'투자'),
+    fl=flow([('① AI CAPEX','4Q 약 410억달러',['금융리스 포함','전년 대비 +69%'],'투자'),
              ('② 용량','AI 인프라 확충',['데이터센터·GPU','Azure·Copilot 용량'],'확충'),
              ('③ 사용량','Azure +43%',['Azure·기타 클라우드','Copilot 3,000만 좌석+'],'확인'),
-             ('④ 매출·계약','Cloud 593억달러',['전년 대비 +27%','상업용 RPO 6,780억달러','RPO 전년 대비 +84%'],'축적'),
-             ('⑤ 투자비 회수','4Q 매출 900억달러',['전년 대비 +18%','FY26 EPS 17.95달러'],'관건')],w=W)
+             ('④ 계약·매출','RPO 6,780억달러',['+84%','OpenAI 제외 +25%','12개월 인식 약 30%'],'축적'),
+             ('⑤ 경제성','Cloud GM 65%',['전년 대비 하락','감가상각 확인'],'관건')],w=W)
     loop=(f'<div style="width:{W}pt;margin-top:3pt;position:relative;height:14pt">'
           f'<div style="position:absolute;left:36pt;right:36pt;top:0;height:8pt;border:0.8pt solid {LG};border-top:none"></div>'
-          f'<div style="position:absolute;left:0;right:0;top:6pt;text-align:center;font-size:6pt;color:#7a7a7a;background:transparent"><span style="background:#fff;padding:0 4pt">회수된 현금흐름과 RPO가 다음 CAPEX를 정당화하는 순환 · CAPEX가 매출보다 빠르게 늘면 고리가 약해진다</span></div></div>')
+          f'<div style="position:absolute;left:0;right:0;top:6pt;text-align:center;font-size:6pt;color:#7a7a7a;background:transparent"><span style="background:#fff;padding:0 4pt">장기 계약 확보 → 매출 전환 → 투자 경제성 확인은 서로 다른 단계 · 계약 증가만으로 회수가 증명되지 않는다</span></div></div>')
     cap=(f'<div style="margin-top:8pt">'+title('투자비와 매출의 비율','(억달러, FY26 연간)')
          +hbar('연간 매출',3318,3318,318,NAVY,'3,318억달러')+hbar('유형자산 투자',1159,3318,318,RED,'1,159억달러 · 매출의 35%')+'</div>')
     return fl+loop
@@ -233,12 +233,22 @@ def eth():
     p2=('<div class="dg"><div class="dt">② 스테이킹된 ETH</div><div class="du">(8월 기준)</div></div>'
         +f'<div style="margin-top:14pt;width:{w}pt">'+hstack([('4,170만 개',33.3,NAVY,'#fff'),('유통 공급 약 2/3',66.7,LS,NAVY)],w=w,h=26,fs=6.4)+'</div>'
         +note('공급량의 약 3분의 1이 스테이킹에 묶임',c='dnv',mt=4))
-    p3=vbars('③ 현물 ETF 순유입','(억달러, 7월)',[('7월',3.65,NAVY,'3.65',NAVY)],w=w,h=40,vmax=4.2,barw=0.5,notes=note('월간 최대. 기관 자금 유입 경로',c='dnv',mt=0))
+    p3=('<div class="dg"><div class="dt">③ 미국 현물 ETF 순유입</div><div class="du">(Farside, 9월 29일까지)</div></div>'
+        +f'<div style="margin-top:9pt;width:{w}pt;border-left:2.4pt solid {NAVY};padding:3pt 0 3pt 6pt">'
+        +f'<div style="font-size:5.9pt;color:{GRAY}">9월 23~29일 5거래일 합계</div><div style="font-size:10.5pt;font-weight:700;color:{NAVY};line-height:13pt">+2억 7,190만달러</div>'
+        +f'<div style="font-size:5.9pt;color:{GRAY};margin-top:3pt">9월 29일 하루</div><div style="font-size:8.2pt;font-weight:700;color:{RED};line-height:10pt">-280만달러</div></div>'
+        +note('하루 유출과 누적 유입을 구분. 직접 자금 경로',c='dnv',mt=4))
     fl=flow([('사용처','스테이블코인·DeFi·RWA',['송금, 대출·거래, 국채·펀드 토큰화'],''),
              ('실행','이더리움 네트워크',['스마트 계약 실행'],''),
              ('수수료','가스비는 ETH로 지불',['모든 거래의 수수료'],''),
-             ('가치 포착','ETH 수요·스테이킹',['네트워크 사용 → ETH 수요'],'')],w=W,accent_last=True)
-    return row(col(p1,w),col(p2,w),p3,gap=22)+'<div style="margin-top:9pt"></div>'+fl
+             ('가격','ETF 수급·금리·달러',['사용 증가가 곧 가격 상승은 아님'],'')],w=W,accent_last=True)
+    return row(col(p1,w),col(p2,w),col(p3,w),gap=22)+'<div style="margin-top:9pt"></div>'+fl
+
+def cryptoflow():
+    return flow([('① 매크로','금리·달러·유동성',['미국 정책·실질금리, DXY','유동성과 위험선호'],''),
+                 ('② BTC와 현물 수급','BTC 방향',['현물 ETF·ETP 순유입','거래소 현물 거래량'],''),
+                 ('③ 가격 확인','추세·지지·저항',['거래량 동반 돌파 여부','진입·확인·무효화 기준'],''),
+                 ('④ 개별 요인','네트워크·이벤트',['사용량, 업그레이드','상품 출시, 규제'],'')],w=W,accent_last=True)
 
 # 17 ---------------- 스택스 : layered flow (A)
 def stx():
@@ -246,14 +256,14 @@ def stx():
         return (f'<div style="display:flex;margin-top:3pt;margin-left:{indent}pt;border:0.6pt solid #d8dbe4;border-left:2.4pt solid {col};background:#fff">'
                 f'<div style="width:78pt;padding:4pt 5pt;font-size:7pt;font-weight:700;color:{NAVY}">{name}</div>'
                 f'<div style="flex:1;padding:4pt 5pt;font-size:6.1pt;color:#555;line-height:8.2pt">{desc}</div>'
-                f'<div style="width:96pt;padding:4pt 5pt;font-size:6.4pt;font-weight:700;color:{col};text-align:right;line-height:8.2pt">{num}</div></div>')
+                f'<div style="width:104pt;padding:4pt 5pt;font-size:6.2pt;font-weight:700;color:{col};text-align:right;line-height:8.2pt">{num}</div></div>')
     stack=('<div class="dg"><div class="dt">비트코인에서 STX까지의 연결 구조</div><div class="du">(아래에서 위로 가치가 올라온다)</div></div>'
            +layer('⑤ STX 사용','수수료, 스태킹(STX 예치 → BTC 보상)','가치 포착',RED,48)
-           +layer('④ Bitcoin DeFi','대출·거래 애플리케이션','DeFi 투입 1억 2,100만달러<br>누적 지갑 40만 개+',MID,36)
-           +layer('③ Stacks 스마트 계약','스택스 블록을 비트코인 블록에 기록해 보안을 빌림','',MID,24)
-           +layer('② sBTC','BTC와 1:1 연동, BTC를 금융에 활용','예치 5억 4,500만달러<br>(1분기 말)',NAVY,12)
-           +layer('① Bitcoin','가치저장·기관·ETF 보유. 기본 레이어는 프로그래밍 기능 최소화','',NAVY,0))
-    price=note('<b style="color:#c0392b">가격이 먼저 움직였다</b>: STX/BTC는 8월 저점 0.00000181BTC에서 9월 29일 0.00000380BTC로 +110%, 5월 고점 0.00000462BTC 대비로는 -18%. 성장 여부는 가격이 아니라 sBTC 예치 규모로 확인한다',mt=6)
+           +layer('④ Bitcoin DeFi','대출·거래 애플리케이션','9/10~12/10 DeFi 보상<br>(월 1 BTC, 10/10 중간 점검)',MID,36)
+           +layer('③ Stacks 스마트 계약','스택스 블록을 비트코인 블록에 기록해 보안을 빌림','9/10 Dual Stacking 종료<br>Bitcoin Staking 전환',MID,24)
+           +layer('② sBTC','BTC와 1:1 연동, BTC를 금융에 활용','9/4 서명자 합류<br>(Ankr·The Tie·HashKey)',NAVY,12)
+           +layer('① Bitcoin','가치저장·기관·ETF 보유. 기본 레이어는 프로그래밍 기능 최소화','BTC 방향이 선행 변수',NAVY,0))
+    price=note('<b style="color:#0b1f5c">확인 기준</b>: 촉매의 효과는 달러 표시 TVL이 아니라 BTC 수량 기준 sBTC 순예치와 STX 현물 거래량, STX/BTC 상대강도로 본다. 1분기 스냅숏(sBTC 예치 5억 4,500만달러, 누적 지갑 40만 개+)은 과거 현황이다',mt=6)
     return stack+price
 
 # 18 ---------------- 지캐시 : public vs shielded comparison (E)
