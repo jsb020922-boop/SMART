@@ -1,0 +1,83 @@
+@page {
+  size: A4; margin: 20pt 25.5pt 47pt 17pt;
+  background: url(wm.png) no-repeat 157pt 325pt / 272pt 201pt;
+  @bottom-right { content: "DART180 리서치 " counter(page); font-family: Pretendard; font-size: 7.5pt; color: #9a9a9a; vertical-align: top; padding-top: 25.6pt; }
+}
+html { font-family: Pretendard; }
+body { margin: 0; color: #383838; }
+.col { margin-left: 153.1pt; }
+/* chapter opener */
+.chap { page-break-before: always; }
+.rh { display: flex; justify-content: space-between; font-size: 7.6pt; color: #868686; height: 10pt; line-height: 10pt; }
+.chap .rule { border-top: 0.7pt solid #0a1f5b; margin-top: 21.6pt; }
+.band { background: #0a1f5b; height: 38.5pt; margin-top: 5.7pt; position: relative; }
+.band .num { position: absolute; left: 17pt; top: 14.5pt; font-size: 10pt; font-weight: 700; color: #8fa3c9; }
+.band .ttl { white-space: nowrap; position: absolute; left: 53.9pt; top: 7.4pt; font-size: 18pt; font-weight: 300; color: #fff; letter-spacing: -0.1pt; }
+.sec { position: relative; margin-top: 26pt; }
+.sec .sn { position: absolute; left: -33.2pt; top: 1pt; font-size: 15pt; font-weight: 700; color: #d2d7e2; }
+.sec h2 { font-size: 11.3pt; font-weight: 700; color: #0d4176; margin: 0 0 5pt; }
+.p { font-size: 9.2pt; line-height: 14.55pt; color: #383838; text-align: justify; margin: 0 0 5.2pt; word-break: break-all; }
+.lb { font-weight: 700; color: #0d4176; }
+.em { font-weight: 700; color: #1a1a1a; text-decoration: underline; text-decoration-thickness: 0.75pt; text-underline-offset: 2.2pt; }
+.q { font-weight: 700; color: #0b1f5c; }
+/* stock header */
+.stock { page-break-before: always; }
+.sh { position: relative; border-top: 2.4pt solid #0a1f5b; border-bottom: 0.6pt solid #9a9a9a; padding: 7.2pt 0 8.4pt; margin: 42pt 0 11pt; }
+.sh .no { position: absolute; left: -66.8pt; top: 8.6pt; width: 50pt; text-align: right; white-space: nowrap; }
+.sh .no b { font-size: 20pt; font-weight: 700; color: #0b1f5c; letter-spacing: -0.5pt; }
+.sh .no i { font-style: normal; font-size: 10pt; font-weight: 500; color: #b4bbca; }
+.sh .nm { font-size: 14.2pt; font-weight: 700; color: #0b1f5c; }
+.sh .sub { font-size: 8.6pt; font-weight: 500; color: #7a7a7a; margin-left: 7pt; }
+.sh .tag { display: inline-block; font-size: 7.1pt; font-weight: 700; color: #fff; background: #0c4175; padding: 1.2pt 5.5pt 1.4pt; margin-left: 8pt; letter-spacing: 0.3pt; position: relative; top: -2pt; }
+/* summary / overview box */
+.box { background: #f9fbfb; border: 0.6pt solid #d8dbe4; border-top: 2.6pt solid #0c4175; padding: 8pt 12pt 3pt; margin: 7pt 0 3pt; page-break-inside: avoid; }
+.box .bt { font-size: 8pt; font-weight: 700; color: #7a7a7a; letter-spacing: 0.4pt; margin-bottom: 4pt; }
+.box .row { display: flex; border-top: 0.6pt solid #e6e8ef; padding: 3.4pt 0 3.2pt; }
+.box .row:first-of-type { border-top: none; }
+.box .row .k { width: 56.7pt; flex: none; font-size: 8.4pt; font-weight: 700; color: #0d4176; line-height: 12.8pt; }
+.box .row .v { flex: 1; font-size: 8.7pt; line-height: 12.8pt; color: #383838; word-break: break-all; }
+/* caption, figure, table, source */
+.cap { background: #e9e9e9; border-bottom: 1pt solid #9a9a9a; font-size: 8.9pt; font-weight: 700; color: #111; padding: 4.3pt 6.2pt 4.1pt; margin-top: 9pt; }
+.fig { margin-top: 6pt; border: 0.6pt solid #d8dbe4; padding: 8pt 9pt 7pt; background: #fff; }
+.figimg img { width: 100%; display: block; }
+.chartwrap { margin-top: 7pt; }
+.chartwrap img { width: 358pt; display: block; margin: 0 auto 0 21pt; }
+.src { font-size: 7.3pt; color: #6d6d6d; border-top: 0.6pt solid #9a9a9a; padding-top: 2.8pt; margin-top: 5.5pt; margin-bottom: 6.5pt; line-height: 10.2pt; }
+.blk { page-break-inside: avoid; }
+table.t { width: 100%; border-collapse: collapse; margin-top: 6pt; }
+table.t th { background: #033a70; color: #fff; font-size: 7.2pt; font-weight: 700; text-align: left; padding: 4.6pt 5.6pt; }
+table.t td { font-size: 7.2pt; color: #1a1a1a; padding: 4.3pt 5.6pt; border-bottom: 0.5pt solid #e4e4e4; line-height: 10pt; }
+table.t td.k { font-size: 7.4pt; font-weight: 700; color: #0b1f5c; width: 76pt; }
+table.t td.pz { background: #f6f6f8; color: #555; width: 76pt; }
+table.t td.bd, table.t th.bd { text-align: center; width: 44pt; }
+.bdg { display: inline-block; font-size: 6.4pt; font-weight: 700; color: #fff; padding: 1.3pt 3.8pt; }
+.b-res { background: #898989; } .b-cfm { background: #bf382a; } .b-sup { background: #0a1f5b; } .b-inv { background: #11447c; } .b-now { background: #5b7fb0; }
+/* ---------- diagram system ---------- */
+.dg { font-size: 7pt; color: #383838; }
+.dg .dt { font-size: 7.6pt; font-weight: 700; color: #0b1f5c; }
+.dg .du { font-size: 6pt; color: #9a9a9a; margin-top: 1pt; }
+.dg .dn { font-size: 6pt; color: #9a9a9a; line-height: 8.6pt; }
+.dg .dr { font-size: 6.3pt; color: #c0392b; font-weight: 700; line-height: 9pt; }
+.dg .dnv { font-size: 6.3pt; color: #0b1f5c; font-weight: 700; line-height: 9pt; }
+.flexrow { display: flex; }
+.vb { position: relative; margin-top: 16pt; border-bottom: 0.6pt solid #9a9a9a; }
+.vb .bar { position: absolute; bottom: 0; }
+.vb .val { position: absolute; font-size: 6.6pt; font-weight: 700; text-align: center; }
+.vb .gl { position: absolute; left: 0; right: 0; border-top: 0.5pt solid #eeeeee; }
+.vbx { position: relative; height: 18pt; }
+.vbx .xl { position: absolute; top: 3pt; font-size: 6pt; color: #7a7a7a; text-align: center; line-height: 7.6pt; }
+.hs { display: flex; height: 17pt; }
+.hs div { color: #fff; font-size: 6.5pt; font-weight: 700; line-height: 17pt; padding-left: 5pt; overflow: hidden; white-space: nowrap; border-right: 0.8pt solid #fff; }
+
+.sh { margin-top: 22pt; }
+.chartwrap img { width: 338pt; margin: 0 auto 0 31pt; }
+table.ov td { font-size: 7.2pt; }
+table.t td.q { font-size: 7.2pt; color: #1a1a1a; }
+table.t td.num { text-align: right; white-space: nowrap; }
+table.t th.num { text-align: right; }
+table.cal td { font-size: 7pt; padding: 3.6pt 5pt; }
+table.cal td:first-child { color: #1a1a1a; }
+table.cal { table-layout: fixed; }
+table.cal td { line-height: 9.4pt; }
+table.cal td { padding: 2.9pt 5pt; }
+table.cal th { padding: 3.8pt 5pt; }
