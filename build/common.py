@@ -2,12 +2,12 @@ from build import *
 import diags
 def E(t): return f'<span class="em">{t}</span>'
 def Q(t): return f'<span class="q">{t}</span>'
-KRSRC='한국거래소, DART180 리서치. 이동평균선 5·20·60·120일, 9월 29일 장중 기준. HTS 일봉 데이터를 재도식화'
+KRSRC='한국거래소, DART180 리서치. 이동평균선 5·20·60·120일. 일봉은 9월 29일까지, ○는 9월 30일 종가. 빗금 거래량은 9월 29일 장중 집계. HTS 일봉 데이터를 재도식화'
 def chart(key,title,src=KRSRC):
-    return figure(title,f'<img src="charts/{key}.png">',f'자료: {src}',chart=True)
+    return figure(title,f'<img src="charts2/{key}.png">',f'자료: {src}',chart=True)
 def dfig(key,title,src):
     return figure(title,getattr(diags,key)(),src)
-PZSRC='자료: DART180 리서치. 9월 29일 장중 기준. 가격 구간은 목표주가가 아니라 투자 논리가 가격 추세로 연결되는지 확인하는 기준'
+PZSRC='자료: DART180 리서치. 9월 30일 종가 기준. 가격 구간은 목표주가가 아니라 투자 논리가 가격 추세로 연결되는지 확인하는 기준'
 def pos(cur,hi,lo): return f'{(cur-lo)/(hi-lo)*100:.0f}%'
 def overview_table(title,rows,src):
     n=nextno('tab')

@@ -15,3 +15,9 @@
 
 ## 재빌드
 V3 원본을 `../v3.pdf`, 원본 차트 이미지를 `../img/`에 둔 뒤 `python3 main.py` → `new_sections.pdf`를 V3 1~19p와 병합.
+
+## 9월 30일 마감 수정 (최종 마감)
+- 1~19p: 원본 문단을 같은 CSS로 다시 조판해 제자리 교체(`pedit.py`, `apply_edits.py`), 표 셀·그림 라벨 교체(`apply_cells.py`), 그림 2·3·4 재도식(`v3figs.py` → `v3figs/`)
+- 20~60p: 국내 종가 9월 30일 반영(`update930.py` → `d930/`, `patch930.py`), 일봉 차트 확대 재렌더(`render2.py`, `charts2.py` → `charts2/`), 반복 도식 4개 교체(`diag_new.py` → `diag2/`)
+- 기준 시점: 국내 9월 30일 종가, 미국 현지 9월 29일 종가(9월 30일 장은 발간 시점 개장 전), 암호자산 Binance 9월 29일 일봉
+- 재빌드: `python3 main.py` → `new_sections.pdf`, `apply_edits.py` → `apply_cells.py`로 1~19p 수정 후 병합

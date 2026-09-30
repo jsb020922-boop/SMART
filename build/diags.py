@@ -1,5 +1,5 @@
 from dg import *
-W=380
+W=386
 def row(*cols,gap=18,align='flex-start'):
     return f'<div class="flexrow" style="width:{W}pt;gap:{gap}pt;align-items:{align}">'+''.join(cols)+'</div>'
 def col(html,w): return f'<div style="width:{w}pt">{html}</div>'
@@ -39,17 +39,14 @@ def sksquare():
             +row(col(mid,nav_w+8),col(right,W-nav_w-8-16),gap=16))
     return top+midblk
 
-# 2 ---------------- HD현대 : comparison (E)
+# 2 ---------------- HD현대 : comparison + price-vs-estimate divergence (E + B)
 def hdhyundai():
     left=vbars('2분기 연결 영업이익 기여','(억원, 2026년 2분기)',[
-        ('HD현대오일뱅크<br>(정유)',18241,MID,'18,241 · 44%',MID),('HD한국조선해양<br>(조선)',16451,NAVY,'16,451 · 40%',NAVY),('기타 자회사·연결조정<br>(차감 산출)',6554,SLATE,'6,554 · 16%',GRAY)],
-        w=205,h=92,vmax=22000,grid=(10000,20000),
+        ('HD현대오일뱅크<br>(정유)',18241,MID,'18,241 · 44%',MID),('HD한국조선해양<br>(조선)',16451,NAVY,'16,451 · 40%',NAVY),('기타 자회사·<br>연결조정(차감)',6554,SLATE,'6,554 · 16%',GRAY)],
+        w=172,h=90,vmax=21000,grid=(10000,20000),barw=0.62,
         notes=note('연결 영업이익 4조 1,246억원(전년 대비 +262.2%, 전 분기 대비 +45.5%). 기타는 연결 합계에서 두 자회사를 뺀 값',mt=2))
-    right=vbars('이익 추정치와 주가','(4월 추정치 · 5월 4일 고점 = 100)',[
-        ('4월<br>추정',100,LS,'8.14조',GRAY),('9월<br>추정',169.2,NAVY,'13.78조',NAVY),('5/4<br>고점',100,LS,'336,000',GRAY),('9/29<br>현재가',60.3,RED,'202,500',RED)],
-        w=157,h=92,vmax=200,grid=(100,),
-        notes=note('2026 영업이익 추정 <b style="color:#0b1f5c">+69%</b> · 주가 <b style="color:#c0392b">-39.7%</b><br>12개월 선행 PER 5.9배 · NAV 할인율 약 58%',mt=2))
-    return row(left,right,gap=18)
+    right='<img src="diag2/hdhyundai_line.png" style="width:196pt;display:block">'
+    return row(left,col(right,196),gap=18)
 
 # 3 ---------------- HD한국조선해양 : business flow with lag (A)
 def hdksoe():
@@ -98,18 +95,17 @@ def hanwhaaero():
 # 6 ---------------- DB손해보험 : 3 diagnostic panels (D)
 def dbins():
     w=112
-    p1=vbars('① 장기보험손익','(억원, 2분기)',[('2025.2Q<br>(역산)',2570,LS,'2,570',GRAY),('2026.2Q',5105,NAVY,'5,105',NAVY)],w=w,h=70,vmax=6500,
+    p1=vbars('① 장기보험손익','(억원, 2분기)',[('2025.2Q<br>(역산)',2570,LS,'2,570',GRAY),('2026.2Q',5105,NAVY,'5,105',NAVY)],w=w,h=62,vmax=6500,
              notes=note('+98.6%. 보험손익 5,618억원(+109.9%)의 91%',c='dnv',mt=0))
-    p2=vbars('② 분기 순이익','(억원, 2026년)',[('1Q<br>(상반기-2Q)',2685,LS,'2,685',GRAY),('2Q',7111,NAVY,'7,111',NAVY)],w=w,h=70,vmax=9000,
+    p2=vbars('② 분기 순이익','(억원, 2026년)',[('1Q<br>(상반기-2Q)',2685,LS,'2,685',GRAY),('2Q',7111,NAVY,'7,111',NAVY)],w=w,h=62,vmax=9000,
              notes=note('상반기 9,796억원(+8.0%). 2Q에 손실계약 환입 포함',c='dr',mt=0))
-    p3=vbars('③ K-ICS 비율','(%)',[('3월 말',232.1,LS,'232.1',GRAY),('6월 말',204.3,RED,'204.3',RED)],w=w,h=70,vmax=280,
+    p3=vbars('③ K-ICS 비율','(%)',[('3월 말',232.1,LS,'232.1',GRAY),('6월 말',204.3,RED,'204.3',RED)],w=w,h=62,vmax=280,
              notes=note('한 분기 -27.8%p. 추가 하락 시 주주환원 여력 축소',c='dr',mt=0))
     return row(p1,p2,p3,gap=22)+note('CSM 잔액 12조 8,000억원(6월 말, 원수 기준) · 자동차보험손익 62억원(-80.6%). 이익의 지속성은 ①, 일회성은 ②, 자본 여력은 ③으로 본다',mt=6)
 
 # 7 ---------------- 이오테크닉스 : trend + process mix (B)
 def eotech():
-    left=vbars('매출과 영업이익','(억원)',[('2025 매출<br>(역산)',3801,LS,'3,801',GRAY),('최근 4Q<br>매출',4447,NAVY,'4,447',NAVY),('2025 OP<br>(역산)',810,LS,'810',GRAY),('최근 4Q<br>OP',1093,RED,'1,093',RED)],
-               w=150,h=86,vmax=5400,grid=(2500,5000),notes=note('매출 +17%, 영업이익 +35%<br>영업이익률 21.2% → 24.6%',c='dnv',mt=0))
+    left='<img src="diag2/eotech_slope.png" style="width:176pt;display:block">'
     def step(stage,name,desc,status,bg):
         return (f'<div style="display:flex;border:0.6pt solid #d8dbe4;margin-top:4pt;background:#fff">'
                 f'<div style="width:46pt;background:#f4f6f8;font-size:5.9pt;color:#7a7a7a;padding:4pt 4pt;line-height:7.6pt">{stage}</div>'
@@ -120,7 +116,7 @@ def eotech():
            +step('박막 웨이퍼','레이저 커팅 장비','얇은 웨이퍼 절단. 고적층 HBM에서 적용 범위 확대 가능','성장 · 확인 필요',RED)
            +step('패키지','레이저 마커','패키지에 식별 정보를 새김. 주력 공급사','매출 기반',NAVY)
            +note('HBM 공정 채용과 매출 기여는 아직 숫자로 미확인. 성장 장비의 신규 고객 수주가 첫 확인 지표',c='dr',mt=4))
-    return row(left,col(right,212),gap=18)
+    return row(col(left,176),col(right,192),gap=18)
 
 # 8 ---------------- RF머트리얼즈 : capacity / demand map (G)
 def rfmat():
@@ -154,14 +150,10 @@ def isc():
     capn=note('AI 매출 +71%. 연간 생산능력 약 21만 개 → 2029년 최대 64만 개(약 3배) 증설 계획',c='dr',mt=4)
     return row(left,col(mix+capn,150),gap=30)
 
-# 10 ---------------- LS에코에너지 : 3 diagnostic panels (D)
+# 10 ---------------- LS에코에너지 : growth speed + incremental margin (C)
 def lseco():
-    w=112
-    p1=vbars('① 상반기 매출','(억원)',[('2025.1H<br>(역산)',4787,LS,'4,787',GRAY),('2026.1H',6358,NAVY,'6,358',NAVY)],w=w,h=70,vmax=7600,notes=note('+32.8%, 사상 최대. 구리 가격이 판가에 전가',c='dnv',mt=0))
-    p2=vbars('② 분기 영업이익','(억원)',[('2025.2Q<br>(역산)',236,LS,'236',GRAY),('2026.1Q<br>(차감)',201,LS,'201',GRAY),('2026.2Q',253,NAVY,'253',NAVY)],w=w,h=70,vmax=310,notes=note('2Q +7%, 상반기 454억원(+16.5%)',c='dnv',mt=0))
-    p3=vbars('③ 성장률 비교','(%)',[('매출<br>1H',32.8,SLATE,'+32.8',MID),('영업이익<br>2Q',7,NAVY,'+7',NAVY),('주가<br>7월 저점 대비',96.25,RED,'+96',RED)],w=w,h=70,vmax=118,notes=note('영업이익률 8.1%(역산) → 7.1%',c='dr',mt=0))
-    return (row(p1,p2,p3,gap=22)
-            +note('데이터센터향 버스덕트 상반기 매출 전년 대비 약 3배 · 400kV급 초고압 케이블 유럽·북미 사전적격성평가 완료. 수익성은 고부가 제품 비중이 정한다',mt=6))
+    return ('<img src="diag2/lseco_speed.png" style="width:386pt;display:block">'
+            +note('데이터센터향 버스덕트 상반기 매출 전년 대비 약 3배 · 400kV급 초고압 케이블 유럽·북미 사전적격성평가 완료. 2025년 상반기 매출·영업이익은 증가율로 역산, 증분 이익률 = (2026 상반기 영업이익 - 2025 상반기) ÷ (매출 증가분)',mt=5))
 
 # 11 ---------------- 삼성SDI : turnaround bridge (C)
 def samsungsdi():
@@ -198,13 +190,10 @@ def skinno():
                 notes=note('한 분기 +5,034억원. 중동 경쟁사 공급 차질로 그룹Ⅲ 기유 마진 상승',c='dr',mt=0))
     return row(left,right,gap=28)+note('2분기 매출 29조 1,572억원(+49.9%). 상향의 원천이 유가와 경쟁사 공급 차질이라는 외생 변수에 기대고 있어 지속 기간이 판단의 핵심이다',mt=5)
 
-# 13 ---------------- GE 버노바 : 3 diagnostic panels (D)
+# 13 ---------------- GE 버노바 : 2x2 small multiples (E + D)
 def gev():
-    w=112
-    p1=vbars('① 수주와 매출','(억달러, 2026년 2분기)',[('수주',242,NAVY,'242',NAVY),('매출',111,LS,'111',GRAY)],w=w,h=54,vmax=290,notes=note('수주 +88%(유기적 +12%), 매출 +22%. 수주/매출 약 2.2배',c='dnv',mt=0))
-    p2=vbars('② 총 백로그','(억달러)',[('1년 전',1290,LS,'1,290',GRAY),('2026.2Q',1760,NAVY,'1,760',NAVY)],w=w,h=54,vmax=2100,notes=note('+36%. 전력화 부문 백로그 410억달러(+69%)',c='dnv',mt=0))
-    p3=vbars('③ 가스터빈 백로그·슬롯','(GW)',[('1Q',100,LS,'100',GRAY),('2Q',116,NAVY,'116',NAVY),('연말 목표',125,SLATE,'125+',MID,True)],w=w,h=54,vmax=150,notes=note('CAPA 2028년 연 24GW, 2030년 30GW로 확대',c='dr',mt=0))
-    return row(p1,p2,p3,gap=22)+note('2분기 잉여현금흐름 51억달러(2025년 연간 상회) · 조정 EBITDA 마진 11.3%. 주문 → 백로그 → 현금은 확인, 남은 변수는 마진',c='dr',mt=4)
+    return ('<img src="diag2/gev_2x2.png" style="width:386pt;display:block">'
+            +note('2분기 잉여현금흐름 51억달러(2025년 연간 상회) · 조정 EBITDA 마진 11.3%. 주문 → 백로그 → 현금은 확인, 남은 변수는 마진',c='dr',mt=4))
 
 # 14 ---------------- 아리스타 네트웍스 : trend + margin structure (B)
 def anet():
@@ -239,12 +228,12 @@ def msft():
 def eth():
     w=112
     p1=('<div class="dg"><div class="dt">① 스테이블코인 발행 잔액</div><div class="du">(억달러, 9월 29일 DefiLlama)</div></div>'
-        +f'<div style="margin-top:14pt;width:{w}pt">'+hstack([('ETH 1,464 · 48%',1464,NAVY,'#fff'),('기타 체인',1599,LS,NAVY)],w=w,h=20,fs=6.2)+'</div>'
+        +f'<div style="margin-top:14pt;width:{w}pt">'+hstack([('ETH 1,464 · 48%',1464,NAVY,'#fff'),('기타 체인',1599,LS,NAVY)],w=w,h=26,fs=6.4)+'</div>'
         +note('전체 3,063억달러의 약 48%가 이더리움에 발행',c='dnv',mt=4))
     p2=('<div class="dg"><div class="dt">② 스테이킹된 ETH</div><div class="du">(8월 기준)</div></div>'
-        +f'<div style="margin-top:14pt;width:{w}pt">'+hstack([('4,170만 개',33.3,NAVY,'#fff'),('유통 공급 약 2/3',66.7,LS,NAVY)],w=w,h=20,fs=6.2)+'</div>'
+        +f'<div style="margin-top:14pt;width:{w}pt">'+hstack([('4,170만 개',33.3,NAVY,'#fff'),('유통 공급 약 2/3',66.7,LS,NAVY)],w=w,h=26,fs=6.4)+'</div>'
         +note('공급량의 약 3분의 1이 스테이킹에 묶임',c='dnv',mt=4))
-    p3=vbars('③ 현물 ETF 순유입','(억달러, 7월)',[('7월',3.65,NAVY,'3.65',NAVY)],w=w,h=34,vmax=4.6,barw=0.4,notes=note('월간 최대. 기관 자금 유입 경로',c='dnv',mt=0))
+    p3=vbars('③ 현물 ETF 순유입','(억달러, 7월)',[('7월',3.65,NAVY,'3.65',NAVY)],w=w,h=40,vmax=4.2,barw=0.5,notes=note('월간 최대. 기관 자금 유입 경로',c='dnv',mt=0))
     fl=flow([('사용처','스테이블코인·DeFi·RWA',['송금, 대출·거래, 국채·펀드 토큰화'],''),
              ('실행','이더리움 네트워크',['스마트 계약 실행'],''),
              ('수수료','가스비는 ETH로 지불',['모든 거래의 수수료'],''),

@@ -1,9 +1,9 @@
 NAVY='#0b1f5c'; MID='#12457d'; SLATE='#8fa3c9'; LS='#c9d3e3'; RED='#c0392b'; GRAY='#7a7a7a'; LG='#9a9a9a'; PINK='#e8b4ae'
 def fmt(v,dec=0):
     return f'{v:,.{dec}f}'
-def vbars(title,unit,bars,w=170,h=72,vmax=None,vmin=0,grid=(),notes='',hatch=None,barw=0.52,title_h=True):
+def vbars(title,unit,bars,w=170,h=72,vmax=None,vmin=0,grid=(),notes='',hatch=None,barw=0.6,title_h=True):
     """bars: list of (xlabel, value, color, valtext, valcolor[, hatched])"""
-    vmax=vmax or max(b[1] for b in bars)*1.18
+    vmax=vmax or max(b[1] for b in bars)*1.12
     n=len(bars); slot=w/n; bw=slot*barw
     rng=vmax-vmin; zero=(0-vmin)/rng*h
     out=[f'<div class="dg" style="width:{w}pt">']
