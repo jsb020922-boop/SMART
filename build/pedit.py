@@ -53,8 +53,43 @@ CSS='''@page{size:399.7pt 700pt;margin:0} body{margin:0;font-family:Pretendard}
 .pl{font-size:9.2pt;line-height:14.55pt;color:#383838;text-align:left;margin:0;word-break:break-all}
 .src1{font-size:7.3pt;line-height:10.2pt;color:#6d6d6d;margin:0;white-space:nowrap}
 .src71{font-size:7.1pt;line-height:9.9pt;color:#6d6d6d;margin:0;white-space:nowrap}
+.ex{font-size:8.8pt;line-height:13.8pt;color:#2b2b2b;text-align:left;margin:0;white-space:nowrap}
+.ex b{font-weight:700;color:#111}
 .lb{font-weight:700;color:#0d4176}.em{font-weight:700;color:#1a1a1a;text-decoration:underline;text-decoration-thickness:0.75pt;text-underline-offset:2.2pt}
 .q{font-weight:700;color:#0b1f5c} b{font-weight:700;color:#1a1a1a}'''
+def keep_words(inner, width, size=8.8, slack=3.0):
+    """Korean keep-all for WeasyPrint (which breaks between syllables): wrap at spaces only by measuring each word
+    with the same Pretendard fonts, and emit explicit <br> line breaks; real spaces stay in the text layer"""
+    import re
+    fonts = {False: pymupdf.Font(fontfile='/root/.fonts/Pretendard-Regular.ttf'),
+             True: pymupdf.Font(fontfile='/root/.fonts/Pretendard-Bold.ttf')}
+    words, cur, bold = [], [], False
+    for tok in re.split(r'(<b>|</b>| )', inner):
+        if tok == '<b>': bold = True
+        elif tok == '</b>': bold = False
+        elif tok == ' ':
+            if cur: words.append(cur); cur = []
+        elif tok: cur.append((tok, bold))
+    if cur: words.append(cur)
+    wlen = lambda w: sum(fonts[b].text_length(t, fontsize=size) for t, b in w)
+    space = fonts[False].text_length(' ', fontsize=size)
+    lines, line, used = [], [], 0.0
+    for w in words:
+        need = wlen(w) + (space if line else 0.0)
+        if line and used + need > width - slack:
+            lines.append(line); line, used = [], 0.0; need = wlen(w)
+        line.append(w); used += need
+    if line: lines.append(line)
+    def html(line):
+        flat = []
+        for k, w in enumerate(line):
+            if k: flat.append((' ', flat[-1][1] and w[0][1]))     # a space inside a bold phrase stays bold
+            flat += w
+        out = ''
+        for t, b in flat:
+            out += f'<b>{t}</b>' if b else t
+        return out.replace('</b><b>', '')
+    return '<br>'.join(html(l) for l in lines)
 def render_snip(inner,cls='p',width=399.7,css_extra=''):
     doc=f'<html><head><style>{CSS.replace("399.7pt",f"{width}pt")}{css_extra}</style></head><body><p class="{cls}">{inner}</p></body></html>'
     pdf=HTML(string=doc).write_pdf(); sd=pymupdf.open('pdf',pdf); return sd

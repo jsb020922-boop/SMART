@@ -2,13 +2,12 @@
 
 step 1  native: every source note that stays one line is replaced in place (same baseline, size, colour)
 step 2  reflow: multi-line source notes on single-column pages become one line and the content below moves up
-step 3  p10: commentary under each official image; p14: page re-stacked with commentary under each Micron table
+step 3  p10, p14: official image -> short explanation (one bold key phrase) -> one-line source
 """
 import sys, pymupdf, pedit, relayout as R
 
 BASE = sys.argv[1] if len(sys.argv) > 1 else 'base/DART180_Monthly_10월_전략_v30.pdf'
-OUT = sys.argv[2] if len(sys.argv) > 2 else 'v31.pdf'
-LB = lambda t: f'<span class="lb">{t}</span>'
+OUT = sys.argv[2] if len(sys.argv) > 2 else 'v32_body.pdf'
 
 # ------------------------------------------------------------------ source notes: page -> [(old substring, new)]
 SRC = {
@@ -150,19 +149,27 @@ for pn, items in sorted(multi.items()):
         log.append((pn, len(grp), 'reflow', new))
     R.compose(out, src, pn - 1, ops)
 
-# ------------------------------------------------------------------ step 3a: p10 commentary under each official image
-FOMC = (LB('투자 시사점:') + ' 연준은 12대 0 만장일치로 정책금리를 0.25%p 올려 3.75~4.00%로 인상하고 물가가 여전히 높은 수준이라고 평가했다. '
-        '이는 물가 안정을 위해 긴축 기조를 이어갈 수 있다는 신호로 해석된다. 추가 인상 우려와 높은 할인율은 주식시장의 밸류에이션 회복을 제약하는 요인이며, '
-        'DART180의 지수 상단에 대한 신중한 관점과 연결된다. 10월 FOMC에서는 물가 평가와 추가 인상 가능성의 변화를 확인하고, 장기금리 흐름도 함께 점검한다.')
-CPI = (LB('투자 시사점:') + ' 8월 CPI는 전월 대비 0.4%(전년 대비 3.4%), 식품·에너지를 뺀 근원 CPI는 전월 대비 0.3% 올라 7월 0.2%보다 높아졌다. '
-       '에너지 가격 변동을 제외한 근원 물가에서도 상승 압력이 이어져, 금리 부담이 빠르게 해소될 것으로 판단하기는 이르다. '
-       '주식시장에서는 물가 안정에 따른 전반적인 밸류에이션 상승보다 실제 이익과 가이던스가 확인되는 업종에 대한 선별적 접근이 유효하다. '
-       '다음 확인 지표는 10월 14일 발표되는 9월 CPI의 월간 상승률과 미국 국채금리의 안정 여부다.')
+# ------------------------------------------------------------------ step 3: official evidence, image -> explanation -> one-line source
+# explanation: 2-3 sentences, one bold key phrase, no label; sits under the image, left edge on the figure frame
+FOMC = ('연준은 12대 0 만장일치로 금리를 올리며 물가가 여전히 높다고 평가했고, 이번 조치가 2% 목표로의 더 빠른 복귀를 돕는다고 밝혔다. '
+        '추가 인상 여지가 남아 있는 만큼 <b>장기금리와 할인율 부담이 밸류에이션 회복을 제한하는 구간</b>으로 보고 지수 상단을 신중하게 본다. '
+        '10월 FOMC에서는 물가 평가 문구와 추가 인상 신호가 바뀌는지 확인한다.')
+CPI = ('휘발유가 월간 상승분의 3분의 1 이상을 차지했지만 근원 CPI의 월간 상승률도 7월 0.2%에서 높아져, 에너지만의 문제로 보기 어렵다. '
+       '근원 물가의 월간 상승률이 다시 낮아지기 전까지는 <b>금리 부담이 빠르게 줄기 어렵다</b>고 보고, 지수 전체의 밸류에이션 확대보다 이익이 확인되는 업종에 선별적으로 접근한다. '
+       '다음 확인 조건은 10월 14일 밤 발표되는 9월 CPI의 근원 월간 상승률과 미국 국채금리의 안정 여부다.')
 INTRO10 = '9월 FOMC 성명과 8월 CPI 보도자료는 10월 지수 상단을 정하는 금리 경로의 근거다. 연준이 물가를 어떻게 평가하는지와 근원 물가의 월간 상승률이 내려오는지가 핵심이다.'
+INTRO14 = '마이크론의 FY2026 4분기 실적(발표치)과 FY2027 1분기 가이던스(회사 전망)를 원문 표로 확인한다.'
+MU1 = ('이번 분기 발표치는 전분기보다 매출이 약 31% 늘고 조정 매출총이익률이 2.1%p 높아져 매출 확대와 수익성 개선이 함께 확인됐다. '
+       '다만 클라우드 메모리 사업부의 영업이익률은 78%에서 76%로 낮아져 개선 속도가 사업부마다 달랐고, 이는 <b>메모리 업황에 대한 선별적 긍정 관점</b>을 보강한다. '
+       '이번 분기는 14주로 구성돼 전분기와의 매출 비교에는 회계기간 차이를 함께 고려한다.')
+MU2 = ('다음 분기(FQ1-27) 회사 전망은 매출 중간값이 이번 분기 발표치보다 약 13% 높지만, 조정 매출총이익률은 약 0.75%p 낮은 수준이다. '
+       '<b>매출 성장은 이어지지만 마진 확대는 쉬어 가는 전망</b>으로, 실제 실적이 이 범위를 지키는지 확인한다. '
+       '국내 반도체에 대한 판단은 국내 기업의 실적 발표 이후 이익 추정치 변화와 외국인 수급을 확인해 구체화한다.')
+GAP_IMG, GAP_SRC = 7.0, 6.0      # image -> explanation, explanation -> source rule
 
 
 def place_snip(page, sd, x0, width, top):
-    """place a rendered snippet so its first text line's top sits at `top`"""
+    """place a rendered snippet so its first text line's top sits at `top`; returns the last line's bottom"""
     L = pedit.snip_lines(sd)
     t0 = L[0]['bbox'][1]; bot = max(l['bbox'][3] for l in L)
     dy = top - t0
@@ -170,11 +177,31 @@ def place_snip(page, sd, x0, width, top):
     return bot + dy
 
 
+def place_band(page, sd, x0, x1, a, b, top):
+    """copy band [a, b] of a segment page (columns x0..x1) so that it starts at `top`; returns its bottom"""
+    page.show_pdf_page(pymupdf.Rect(x0, top, x1, top + (b - a)), sd, 0, clip=pymupdf.Rect(x0, a, x1, b))
+    return top + (b - a)
+
+
 def region_lines(page, x0, x1, y0, y1):
     return [l for b in page.get_text('dict')['blocks'] for l in b.get('lines', [])
             if l['bbox'][0] >= x0 - 1 and l['bbox'][2] <= x1 + 1 and l['bbox'][1] >= y0 and l['bbox'][3] <= y1]
 
 
+def source_rules(page):
+    """the 0.4pt rule drawn above each source note (an even-odd pair of rects filled grey)"""
+    return sorted([dd['rect'] for dd in page.get_drawings()
+                   if dd.get('fill') and abs(dd['fill'][0] - 0.604) < 0.01 and 13 < dd['rect'].height < 25], key=lambda r: (r.y0, r.x0))
+
+
+def source_band(page, rule, grp):
+    """rule + one-line source text as one band"""
+    return rule.y0 - 0.3, max(grp[-1]['bbox'][3] + 1.0, rule.y1 + 0.2)
+
+
+# p10: two columns, each a framed official image
+src10 = pymupdf.open('v30_A.pdf')     # p10 had only native edits so far
+sp = src10[9]
 p = out[9]
 intro = region_lines(p, 17, 570, 120, 160)
 base0 = min(l['spans'][0]['origin'][1] for l in intro)
@@ -184,32 +211,31 @@ L = pedit.snip_lines(sd); dy = base0 - L[0]['spans'][0]['origin'][1]
 bot = max(l['bbox'][3] for l in L)
 p.show_pdf_page(pymupdf.Rect(19.8, dy, 19.8 + 547.0, dy + bot + 3), sd, 0, clip=pymupdf.Rect(0, 0, 547.0, bot + 3))
 assert dy + bot < 168, 'p10 intro too tall'
-srcs = {round(g[0]['bbox'][0]): g for f, g in source_groups(p)}
+frames = sorted([dd['rect'] for dd in sp.get_drawings() if dd.get('fill') == (1.0, 1.0, 1.0) and dd['rect'].width > 250
+                 and abs(dd['rect'].y0 - 191.5) < 1], key=lambda r: r.x0)
+rules = source_rules(sp)
+groups = {round(g[0]['bbox'][0]): g for f, g in source_groups(sp)}
 b10 = []
-for x0, txt in [(17, FOMC), (302, CPI)]:
-    g = srcs[x0]
-    sd = pedit.render_snip(txt, 'pl', 267.9)
-    b10.append(place_snip(p, sd, g[0]['bbox'][0], 267.9, g[-1]['bbox'][3] + 9.0))
+for fr, txt in zip(frames, (FOMC, CPI)):
+    rule = [r for r in rules if abs(r.x0 - fr.x0) < 1][0]
+    grp = groups[round(fr.x0)]
+    a, b = source_band(sp, rule, grp)
+    seg = R._segment_doc(src10, 9, a, b)
+    p.add_redact_annot(pymupdf.Rect(fr.x0 - 0.5, a, fr.x1 + 0.5, b), fill=False)
+    p.apply_redactions(images=pymupdf.PDF_REDACT_IMAGE_NONE, graphics=pymupdf.PDF_REDACT_LINE_ART_REMOVE_IF_COVERED,
+                       text=pymupdf.PDF_REDACT_TEXT_REMOVE)
+    y = place_snip(p, pedit.render_snip(pedit.keep_words(txt, fr.width), 'ex', fr.width), fr.x0, fr.width, fr.y1 + GAP_IMG)
+    b10.append(place_band(p, seg, fr.x0, fr.x1, a, b, y + GAP_SRC))
 assert max(b10) < R.LIMIT, ('p10 overflow', b10)
-log.append((10, 'commentary bottoms', [round(b, 1) for b in b10]))
+log.append((10, 'source bottoms', [round(v, 1) for v in b10]))
 
-# ------------------------------------------------------------------ step 3b: p14 re-stacked
-INTRO14 = '마이크론의 FY2026 4분기 실적(발표치)과 FY2027 1분기 가이던스(회사 전망)를 원문 표로 확인한다.'
-MU1 = (LB('투자 시사점:') + ' 마이크론의 FY2026 4분기(FQ4-26) 매출은 542.29억달러, 조정(Non-GAAP) EPS는 33.42달러, 조정 매출총이익률은 87.0%를 기록했다(GAAP EPS 32.87달러). '
-       '전분기 매출 414.56억달러와 조정 매출총이익률 84.9%를 웃돌아 매출 확대와 수익성 개선이 함께 나타났다. '
-       '다만 사업부별로는 클라우드 메모리(137.69억→162.83억달러)와 코어 데이터센터(115.24억→180.02억달러) 매출이 모두 전분기보다 늘었지만 클라우드 메모리의 영업이익률은 78%에서 76%로 낮아져, 수익성 개선이 모든 사업부에서 같은 속도로 나타난 것은 아니다. '
-       '이는 메모리 업황에 대한 선별적 긍정 관점을 보강한다. 해당 분기는 14주로 구성돼 분기 간 매출 비교에는 회계기간 차이를 함께 고려해야 한다.')
-MU2 = (LB('투자 시사점:') + ' 마이크론은 FY2027 1분기(FQ1-27) 매출을 615억달러±15억달러, 조정 EPS를 38.15달러±1달러(GAAP 37.84달러±1달러)로 제시했다. '
-       '매출 전망 중간값은 이번 분기보다 약 13.4% 높지만, 조정 매출총이익률은 87.0%에서 약 86.25%로 소폭 낮아질 것으로 예상했다. '
-       '매출 성장에 대한 회사의 기대가 이어지는 가운데 수익성의 변화도 함께 살펴야 한다. '
-       '국내 반도체에 대한 판단은 각 기업의 실적과 다음 분기 가이던스, 이후 이익 추정치 변화와 외국인 수급을 통해 구체화한다.')
-
+# p14: caption + table image, explanation, source; twice
 src14 = pymupdf.open('v30_A.pdf')     # p14 had only native edits so far
 sp = src14[13]
 bars = sorted([dd['rect'] for dd in sp.get_drawings() if abs(dd['rect'].x0 - 17.0) < 0.5 and abs(dd['rect'].height - 20.45) < 0.6], key=lambda r: r.y0)
+tables = sorted([pymupdf.Rect(i['bbox']) for i in sp.get_image_info() if not R._is_wm(i['bbox'])], key=lambda r: r.y0)
+rules = source_rules(sp)
 groups14 = sorted([g for f, g in source_groups(sp)], key=lambda g: g[0]['bbox'][1])
-seg1 = (bars[0].y0 - 0.3, groups14[0][-1]['bbox'][3] + 1.0)     # caption 1 + results table + source
-seg2 = (bars[1].y0 - 0.3, groups14[1][-1]['bbox'][3] + 1.0)     # caption 2 + guidance table + source
 intro14 = region_lines(sp, 17, 570, 120, 160)
 start = min(l['bbox'][1] for l in intro14) - 0.8
 
@@ -229,13 +255,15 @@ for t in tiny:
     p.add_redact_annot(t, fill=False)
 p.apply_redactions(images=pymupdf.PDF_REDACT_IMAGE_REMOVE, graphics=pymupdf.PDF_REDACT_LINE_ART_NONE, text=pymupdf.PDF_REDACT_TEXT_NONE)
 
+FX0, FX1 = 17.0, 569.8           # figure frame: caption bar and source rule
 y = min(l['bbox'][1] for l in intro14)
 y = place_snip(p, pedit.render_snip(INTRO14, 'p', 547.0), 19.8, 547.0, y) + 18.0
-for (a, b), txt in [(seg1, MU1), (seg2, MU2)]:
-    sd = R._segment_doc(src14, 13, a, b)
-    p.show_pdf_page(pymupdf.Rect(0, y, R.W, y + (b - a)), sd, 0, clip=pymupdf.Rect(0, a, R.W, b))
-    y += (b - a) + 8.0
-    y = place_snip(p, pedit.render_snip(txt, 'p', 547.0), 19.8, 547.0, y) + 16.0
+for bar, tab, rule, grp, txt in zip(bars, tables, rules, groups14, (MU1, MU2)):
+    a, b = bar.y0 - 0.3, tab.y1 + 0.5                       # caption + table image
+    y = place_band(p, R._segment_doc(src14, 13, a, b), 0, R.W, a, b, y)
+    y = place_snip(p, pedit.render_snip(pedit.keep_words(txt, FX1 - FX0), 'ex', FX1 - FX0), FX0, FX1 - FX0, y + GAP_IMG)
+    a, b = source_band(sp, rule, grp)
+    y = place_band(p, R._segment_doc(src14, 13, a, b), 0, R.W, a, b, y + GAP_SRC) + 16.0
 log.append((14, 'bottom', round(y - 16.0, 1)))
 assert y - 16.0 < R.LIMIT, ('p14 overflow', y)
 
