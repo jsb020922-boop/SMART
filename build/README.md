@@ -36,3 +36,16 @@ python3 merge_v4.py   # 병합 (→ DART180_Monthly_10월_전략_최종.pdf)
 - 20~60p 원고: `c_vi.py`(최선호), `c_vii.py`(관심), `c_viii.py`(미국), `c_ix.py`(대체자산), `c_x.py`(부록), 도식은 `diags.py`
 - `new_sections.html`은 20~60p의 조판 결과 HTML(참고용, `main.py`가 다시 만든다)
 - 필요 환경: Python 3, WeasyPrint 70.0, PyMuPDF, Pretendard TTF(`/root/.fonts`), matplotlib(차트 재생성 시)
+
+## 5차 수정 (v30 → v31: 공식자료 해설·출처 주석)
+사용자가 직접 고친 `base/DART180_Monthly_10월_전략_v30.pdf`(63쪽)는 원본 소스가 없어 PDF를 제자리에서 고쳤다. 원고(해설 문장, 쪽별 출처 문구)는 모두 `v30_edit.py` 안에 있다.
+
+```
+python3 v30_edit.py   # base/…_v30.pdf → v31.pdf (중간 산출물 v30_A.pdf)
+python3 qa_v31.py     # 바닥글·워터마크·이미지 위치 불변, 출처 한 줄 형식, 삭제 문구, 깨진 글자 점검
+```
+
+- 1단계: 한 줄로 끝나는 출처 주석은 같은 기준선·크기·색으로 제자리 교체
+- 2단계: 여러 줄이던 출처 주석은 한 줄로 바꾸고 아래 내용을 위로 당김(`relayout.compose`, 클래스 `src1`)
+- 3단계: 10쪽은 두 원문 이미지 아래에 「투자 시사점」 해설(클래스 `pl`), 14쪽은 도입 → 실적 표 → 해설 → 가이던스 표 → 해설 순서로 다시 쌓음
+- `relayout.py`: 워터마크를 위치가 아니라 크기로 판별하도록 바꿈(쪽마다 위치가 조금씩 다름). 4차 빌드(`stepA_v4.py`·`stepB_v4.py`) 결과는 그대로 재현됨

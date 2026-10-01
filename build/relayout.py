@@ -33,6 +33,12 @@ def snip_metrics(sd):
     return top_base, bot, L
 
 
+def _is_wm(bbox):
+    # the watermark sits at slightly different spots across the report, so it is told apart by its size
+    r = pymupdf.Rect(bbox)
+    return abs(r.width - WM_RECT.width) < 1 and abs(r.height - WM_RECT.height) < 1
+
+
 def _wm_xref(page):
     for info in page.get_image_info(xrefs=True):
         r = pymupdf.Rect(info['bbox'])
@@ -54,6 +60,28 @@ def _segment_doc(src_doc, pno, a, b):
     p.apply_redactions(images=pymupdf.PDF_REDACT_IMAGE_REMOVE,
                        graphics=pymupdf.PDF_REDACT_LINE_ART_REMOVE_IF_COVERED,
                        text=pymupdf.PDF_REDACT_TEXT_REMOVE)
+    # the base page keeps its watermark, so a segment must not carry a second copy
+    # (reload first: get_image_info caches its result on the page object)
+    p = sd.reload_page(p)
+    infos = p.get_image_info()
+    others = [pymupdf.Rect(i['bbox']) for i in infos if not _is_wm(i['bbox'])]
+    marks = []
+    for r in {tuple(i['bbox']) for i in infos if _is_wm(i['bbox'])}:
+        r = pymupdf.Rect(r)
+        pts = [pymupdf.Rect(x, y, x + 2, y + 2) for y in range(int(r.y0) + 2, int(r.y1) - 3, 4)
+               for x in range(int(r.x0) + 2, int(r.x1) - 3, 8)]
+        free = [t for t in pts if not any(t.intersects(o) for o in others)]
+        assert free, f'p{pno + 1}: no free point to drop the watermark'
+        marks.append(free[0])
+    if marks:
+        for t in marks:
+            p.add_redact_annot(t, fill=False)
+        p.apply_redactions(images=pymupdf.PDF_REDACT_IMAGE_REMOVE,
+                           graphics=pymupdf.PDF_REDACT_LINE_ART_NONE,
+                           text=pymupdf.PDF_REDACT_TEXT_NONE)
+        p = sd.reload_page(p)
+    assert not any(_is_wm(i['bbox']) and i['width'] > 1 for i in p.get_image_info()), \
+        f'p{pno + 1}: watermark left in segment {a:.1f}-{b:.1f}'
     return sd
 
 
@@ -63,7 +91,7 @@ def content_bottom(page, a, b):
     ys += [d['rect'].y1 for d in page.get_drawings() if d['rect'].y0 >= a - 0.5 and d['rect'].y1 <= b + 0.5]
     ys += [pymupdf.Rect(i['bbox']).y1 for i in page.get_image_info()
            if pymupdf.Rect(i['bbox']).y0 >= a - 0.5 and pymupdf.Rect(i['bbox']).y1 <= b + 0.5
-           and abs(pymupdf.Rect(i['bbox']).y0 - WM_RECT.y0) > 1]
+           and not _is_wm(i['bbox'])]
     return max(ys) if ys else a
 
 
@@ -112,14 +140,16 @@ def compose(out_doc, src_doc, pno, ops, limit=LIMIT, verbose=True):
     out.apply_redactions(images=pymupdf.PDF_REDACT_IMAGE_NONE,
                          graphics=pymupdf.PDF_REDACT_LINE_ART_REMOVE_IF_COVERED,
                          text=pymupdf.PDF_REDACT_TEXT_REMOVE)
+    out = out_doc.reload_page(out)
     tiny = []
     for info in out.get_image_info(xrefs=True):
         r = pymupdf.Rect(info['bbox'])
-        if abs(r.y0 - WM_RECT.y0) < 1 and abs(r.x0 - WM_RECT.x0) < 1:
+        if _is_wm(r):
             continue
         if r.y0 >= start - 0.5 and r.y1 <= BODY_BOT:
             pt = pymupdf.Rect(r.x1 - 3, r.y0 + 1, r.x1 - 1, r.y0 + 3)
-            assert not pt.intersects(WM_RECT), 'image marker inside watermark'
+            assert not any(_is_wm(i['bbox']) and pt.intersects(i['bbox']) for i in out.get_image_info()), \
+                'image marker inside watermark'
             tiny.append(pt)
     for t in tiny:
         out.add_redact_annot(t, fill=False)
